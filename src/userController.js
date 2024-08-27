@@ -1,28 +1,18 @@
-let users = [];
+const { User } = require('../models');
 
-const validateUserInput = (username, password) => {
-  if (!username || !password) {
-    return { error: 'Username and password are required' };
-  }
-  return null;
-};
-
-const registerUser = (req, res) => {
+const registerUser = async (req, res) => {
   const { username, password } = req.body;
 
-  const validationError = validateUserInput(username, password);
-  if (validationError) {
-    return res.status(400).json(validationError);
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required' });
   }
 
-  const newUser = {
-    id: users.length + 1,
-    username,
-    password
-  };
-
-  users.push(newUser);
-  res.status(201).json(newUser);
+  try {
+    const user = await User.create({ username, password });
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating user' });
+  }
 };
 
 module.exports = { registerUser };

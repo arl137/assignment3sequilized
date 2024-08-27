@@ -1,27 +1,20 @@
-let todos = [];
+const client = require('./models');
 
-const validateTaskInput = (task) => {
-  if (!task) {
-    return { error: 'Task is required' };
-  }
-  return null;
-};
+const createTodo = async (req, res) => {
+  const { task, userId } = req.body;
 
-const createTodo = (req, res) => {
-  const { task } = req.body;
-
-  const validationError = validateTaskInput(task);
-  if (validationError) {
-    return res.status(400).json(validationError);
+  if (!task || !userId) {
+    return res.status(400).json({ error: 'Task and userId are required' });
   }
 
-  const newTodo = {
-    id: todos.length + 1,
-    task
-  };
-
-  todos.push(newTodo);
-  res.status(201).json(newTodo);
+  try {
+    const query = 'INSERT INTO todos(task, user_id) VALUES($1, $2) RETURNING *';
+    const values = [task, userId];
+    const result = await client.query(query, values);
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating todo' });
+  }
 };
 
 module.exports = { createTodo };

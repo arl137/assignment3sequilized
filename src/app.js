@@ -8,7 +8,6 @@ const app = express();
 app.use(bodyParser.json());
 
 app.post('/register', registerUser);
-
 app.post('/todo', createTodo);
 
 module.exports = app;
