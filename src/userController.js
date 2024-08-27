@@ -1,6 +1,4 @@
-// src/userController.js
-
-let users = []; // Array untuk menyimpan pengguna sementara
+let users = [];
 
 const validateUserInput = (username, password) => {
   if (!username || !password) {

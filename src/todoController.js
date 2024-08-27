@@ -1,6 +1,4 @@
-// src/todoController.js
-
-let todos = []; // Array untuk menyimpan tugas sementara
+let todos = [];
 
 const validateTaskInput = (task) => {
   if (!task) {
